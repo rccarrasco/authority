@@ -1,9 +1,9 @@
-package com.cervantesvirtual.metadata.antlr;
+package com.cervantesvirtual.dates;
 
+import com.cervantesvirtual.dates.DateParser;
+import com.cervantesvirtual.dates.DateType;
+import com.cervantesvirtual.dates.Period;
 import junit.framework.TestCase;
-import com.cervantesvirtual.metadata.antlr.DateParser;
-import com.cervantesvirtual.metadata.dates.Period;
-import com.cervantesvirtual.metadata.dates.DateType;
 
 public class TestDateParser extends TestCase {
 
@@ -17,12 +17,12 @@ public class TestDateParser extends TestCase {
 		ref = new Period(175, 50, 1550, 50, DateType.YEAR);
 		System.out.println(p);
 		assertEquals(p.equals(ref), true);
-		p = DateParser.parse("n. 1725 - m. 1805");
-		ref = new Period(1725, 0, 1805, 0, DateType.YEAR);
+		p = DateParser.parse("n. 1725");
+		ref = new Period(1725, 0, 1785, 30, DateType.YEAR);
 		System.out.println(p);
 		assertEquals(p.equals(ref), true);
-		p = DateParser.parse("- 1805");
-		ref = new Period(1745, 30, 1805, 0, DateType.YEAR);
+		p = DateParser.parse("- 85 a.C");
+		ref = new Period(-145, 30, -85, 0, DateType.YEAR);
 		System.out.println(p);
 		assertEquals(p.equals(ref), true);
 	}

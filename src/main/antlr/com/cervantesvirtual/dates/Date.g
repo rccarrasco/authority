@@ -7,7 +7,7 @@ grammar Date;
     import com.cervantesvirtual.dates.Period; 
 }
 
-@lexer::header {package com.cervantesvirtual.metadata.antlr;} 
+@lexer::header {package com.cervantesvirtual.dates;} 
 
 @members {
          

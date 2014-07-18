@@ -26,7 +26,6 @@ public class NormalizerTest extends TestCase {
         String s = "María Antonia de Abajo";
         String expResult = "Antonia Abajo";
         String result = Normalizer.removeStopwords(s);
-        System.out.println(result);
         assertEquals(expResult, result);
     }
 

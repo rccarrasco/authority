@@ -3,7 +3,7 @@ package com.cervantesvirtual.metadata.marc;
 
 import junit.framework.TestCase;
 
-public class TestAuthorityRecord extends TestCase {
+public class AuthorityRecordTest extends TestCase {
 	public void testAuthorityRecord() {
             /*
 		java.net.URL urlin = this.getClass().getResource("/MARCBibliographic.xml");

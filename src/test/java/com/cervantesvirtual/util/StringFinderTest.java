@@ -4,7 +4,7 @@ import com.cervantesvirtual.distances.DistanceType;
 import junit.framework.TestCase;
 import com.cervantesvirtual.util.StringFinder;
 
-public class TestStringFinder extends TestCase {
+public class StringFinderTest extends TestCase {
 
 	public void testStringFincer() {
 		String[] words = { "hola", "ola", "halo", "hilo", "filo", "mola" };

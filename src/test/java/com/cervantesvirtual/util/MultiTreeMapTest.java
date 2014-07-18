@@ -25,7 +25,7 @@ import junit.framework.TestCase;
  *
  * @author R.C.C.
  */
-public class TestMultiTreeMap extends TestCase {
+public class MultiTreeMapTest extends TestCase {
 
 	public void testMultiTreeMap() {
 		Map<String, String> map = new TreeMap<>();

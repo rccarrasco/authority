@@ -2,7 +2,7 @@ package com.cervantesvirtual.util;
 
 /**
  * Perform some normalization operations on text.
- * 
+ *
  * @author R.C.C:
  * @version 2011.03.10
  */
@@ -14,7 +14,7 @@ public class Normalizer {
 
     static {
         try {
-            java.io.InputStream is = Normalizer.class.getResourceAsStream("Normalizer.stopwords");
+            java.io.InputStream is = Normalizer.class.getResourceAsStream("/Normalizer.stopwords");
             java.io.BufferedReader reader = new java.io.BufferedReader(
                     new java.io.InputStreamReader(is, "UTF-8"));
             StringBuilder builder = new StringBuilder();
@@ -38,8 +38,7 @@ public class Normalizer {
     }
 
     /**
-     * @param s
-     *            a string.
+     * @param s a string.
      * @return The string with its stopwords removed.
      */
     public static String removeStopwords(String s) {
@@ -52,11 +51,10 @@ public class Normalizer {
 
     /**
      * Remove accents (but keep tilde in ñ, Ñ and diaeresis in ü, Ü)
-     * 
-     * @param s
-     *            a string.
+     *
+     * @param s a string.
      * @return The string without diacritics (keeps only tilde in ñ, Ñ and
-     *         diaeresis in ü, Ü)
+     * diaeresis in ü, Ü)
      */
     public static String removeDiacritics(String s) {
         String res = java.text.Normalizer.normalize(s, decomposed);
@@ -65,20 +63,19 @@ public class Normalizer {
 
     /**
      * Reduce whitespace.
-     * 
-     * @param s
-     *            a string.
-     * @return The string with simple spaces between words.
+     *
+     * @param s a string.
+     * @return The string with simple spaces between words and without
+     * leading/trailing spaces
      */
     public static String normalizeWhitespace(String s) {
-        return s.replaceAll("\\p{Space}+", " ");
+        return s.replaceAll("\\p{Space}+", " ").trim();
     }
 
     /**
      * Remove punctuation characters.
-     * 
-     * @param s
-     *            a string.
+     *
+     * @param s a string.
      * @return The string with only letters, digits and spaces.
      */
     public static String removePunctuation(String s) {
@@ -88,10 +85,9 @@ public class Normalizer {
     /**
      * @param s a string.
      * @return A normalized version of the string: lowercased after diacritics
-     *         and stopwords have been removed. Beware that whitespace must be
-     *         normalized because all (also leading/trailing) stopwords are
-     *         replaced with whitespace. Leading and trailing whitespaces are
-     *         removed.
+     * and stopwords have been removed. Beware that whitespace must be
+     * normalized because all (also leading/trailing) stopwords are replaced
+     * with whitespace. Leading and trailing whitespaces are removed.
      */
     public static String normalize(String s) {
         String filtered = removeStopwords(s);
@@ -100,10 +96,9 @@ public class Normalizer {
     }
 
     /**
-     * @param s
-     *            a string.
+     * @param s a string.
      * @return true if the string is normalized: it is lowercase and contains
-     *         neither diacritics nor stopword removed.
+     * neither diacritics nor stopword removed.
      */
     public boolean isNormal(String s) {
         return normalize(s).equals(s);

@@ -11,7 +11,7 @@ import junit.framework.TestCase;
  *
  * @author rafa
  */
-public class TestSafeFile extends TestCase {
+public class SafeFileTest extends TestCase {
 
     public void testSafeFile() throws Exception {
 

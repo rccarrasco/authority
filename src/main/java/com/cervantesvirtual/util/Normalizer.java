@@ -14,7 +14,7 @@ public class Normalizer {
 
     static {
         try {
-            java.io.InputStream is = Normalizer.class.getResourceAsStream("Normalizer.stopwords");
+            java.io.InputStream is = Normalizer.class.getResourceAsStream("/Normalizer.stopwords");
             java.io.BufferedReader reader = new java.io.BufferedReader(
                     new java.io.InputStreamReader(is, "UTF-8"));
             StringBuilder builder = new StringBuilder();

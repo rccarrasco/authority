@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import junit.framework.TestCase;
 
-public class TestMultiHashMap extends TestCase {
+public class MultiHashMapTest extends TestCase {
 
 	public void testMultiHashMap() {
 		Map<String, String> map = new HashMap<>();

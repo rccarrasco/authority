@@ -6,7 +6,7 @@ import com.cervantesvirtual.metadata.MetadataFormat;
 import org.w3c.dom.Document;
 import java.io.*;
 
-public class TestCollection extends TestCase {
+public class CollectionTest extends TestCase {
 	public void testCollection() {
             /*
 		try {
@@ -37,6 +37,6 @@ public class TestCollection extends TestCase {
 	}
 
 	public static void main(String[] args) {
-		new TestCollection().testCollection();
+		new CollectionTest().testCollection();
 	}
 }

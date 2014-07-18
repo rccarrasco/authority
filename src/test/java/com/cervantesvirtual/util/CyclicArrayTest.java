@@ -2,7 +2,7 @@ package com.cervantesvirtual.util;
 
 import junit.framework.TestCase;
 
-public class TestCyclicArray extends TestCase {
+public class CyclicArrayTest extends TestCase {
 
     public void testCyclicArray() {
         java.util.Set<CyclicArray<String>> set = new java.util.HashSet<>();

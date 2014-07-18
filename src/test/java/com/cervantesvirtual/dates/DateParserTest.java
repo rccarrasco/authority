@@ -5,7 +5,7 @@ import com.cervantesvirtual.dates.DateType;
 import com.cervantesvirtual.dates.Period;
 import junit.framework.TestCase;
 
-public class TestDateParser extends TestCase {
+public class DateParserTest extends TestCase {
 
 	public void testDateParser() {
 		Period p, ref;

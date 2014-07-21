@@ -1,4 +1,4 @@
-package com.cervantesvirtual.marc.authority;
+package com.cervantesvirtual.MARCauthority;
 
 /**
  * MARC differentiates between persons, corporations and meetings

@@ -1,4 +1,4 @@
-package com.cervantesvirtual.marc.authority;
+package com.cervantesvirtual.MARCauthority;
 
 import java.util.List;
 import java.util.ArrayList;

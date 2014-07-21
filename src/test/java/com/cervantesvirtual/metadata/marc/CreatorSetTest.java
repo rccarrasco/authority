@@ -1,6 +1,6 @@
 package com.cervantesvirtual.metadata.marc;
 
-import com.cervantesvirtual.marc.authority.CreatorSet;
+import com.cervantesvirtual.MARCauthority.CreatorSet;
 import com.cervantesvirtual.metadata.Collection;
 import com.cervantesvirtual.metadata.MetadataFormat;
 import java.io.File;

@@ -1,4 +1,4 @@
-package com.cervantesvirtual.marc.authority;
+package com.cervantesvirtual.MARCauthority;
 
 import com.cervantesvirtual.distances.EditDistance;
 import com.cervantesvirtual.util.Normalizer;
@@ -9,9 +9,10 @@ import com.cervantesvirtual.metadata.MARCDataField;
 import com.cervantesvirtual.metadata.MARCSubfield;
 
 /**
- * Stores data about a creator.
+ * Enhances the field storing data about an entity  
+ * with preprocessed data for a more effective information retrieval
  */
-public class Creator extends MARCDataField {
+public class AuthorityField extends MARCDataField {
 
     String id; // creator identifier.
     String name; //  name 
@@ -21,7 +22,6 @@ public class Creator extends MARCDataField {
 
     /**
      * Identify rotations of the name
-     *
      * @param name
      * @return A cyclic array
      */
@@ -35,16 +35,12 @@ public class Creator extends MARCDataField {
     }
 
     /**
-     * Constructor from a bibliographic MARCDatafield containing information
-     * about a creator.
-     *
-     * @param field the MARCDatafield
+     * Extract key information from the data in this field
      */
-    public Creator(MARCDataField field) {
-        super(field);
+    private void parse() {
         StringBuilder builder = new StringBuilder();
 
-        for (MARCSubfield subfield : field.getSubfields()) {
+        for (MARCSubfield subfield : getSubfields()) {
             char code = subfield.getCode();
             if (code == '0') {
                 id = subfield.getValue();
@@ -61,23 +57,36 @@ public class Creator extends MARCDataField {
                     period = new Period();
                 }
             }
-        }
 
-        name = builder.toString();
-        variants = normalizedVariants(name);
-        if (period == null) { // required for comparisons (unknown period)
-            period = new Period();
+            name = builder.toString();
+            variants = normalizedVariants(name);
+            if (title == null) { // avoid error when prepended to name
+                title = "";
+            }
+            if (period == null) { // avoid error in comparisons 
+                period = new Period();
+            }
         }
+    }
 
+    /**
+     * Constructor from a bibliographic MARCDatafield 
+     * containing information about a creator.
+     * @param tag the tag of this field (100, 400, 500)
+     * @param field the MARCDatafield
+     */
+    public AuthorityField(String tag, MARCDataField field) {
+        super(tag, field.getInd1(), field.getInd2(), field.getSubfields());
+        parse();
     }
 
     /**
      * Build a simple creator instance which has only its name defined.
-     *
+     * @param tag the tag of the authority field
      * @param name a creators name.
      */
-    public Creator(String name) {
-        super("100", "$a" + name);
+    public AuthorityField(String heading, String name) {
+        super(heading, "$a" + name);
         this.name = name;
         this.variants = normalizedVariants(name);
         this.title = "";
@@ -107,11 +116,15 @@ public class Creator extends MARCDataField {
 
     /**
      * Check if names and periods are compatible.
-     *
+     * 
      * @param other another creator.
      * @return true if names, titles and periods are compatible.
+     * A record with missing title is compatible with the one with title
+     * (e.g., Santa Teresa de Jesús & Teresa de Jesús)
+     * A rotation of the name (after comma) is also a compatible record 
+     * (e.g., Bartolomé de las Casas & de las Casas, Bartolomé)
      */
-    public boolean compatible(Creator other) {
+    public boolean compatible(AuthorityField other) {
         boolean b = this.title == null || other.title == null
                 || this.title.equals(other.title);
         return this.variants.equals(other.variants) && b
@@ -119,20 +132,14 @@ public class Creator extends MARCDataField {
     }
 
     /**
-     * A measure of the similarity between two creators based on their name and
-     * dates.
-     *
-     * @return A similarity which is smaller than one if dates are compatible
-     * within the default uncertainty and differences in normalized names are
-     * below one character per word.
+     * A measure of the similarity between two authority records
+     * based on their names and dates.
+     * 
+     * @return A similarity which is smaller than one only 
+     * if dates are compatible within the default uncertainty 
+     * and differences in normalized names are below one character per word.
      */
-    public double similarity(Creator other) {
-        if (this.period == null) {
-            System.err.println("Null period for " + this);
-        }
-        if (other.period == null) {
-            System.err.println("Null period for " + other);
-        }
+    public double similarity(AuthorityField other) {
         if (this.period.compatible(other.period)) {
             String ref = this.variants.toString();
             int dist = EditDistance.indelDistance(ref,
@@ -143,7 +150,7 @@ public class Creator extends MARCDataField {
                 dist = Math.min(
                         dist,
                         EditDistance.indelDistance(ref,
-                                other.variants.toString(n)));
+                        other.variants.toString(n)));
             }
             if (this.title != null && other.title != null) {
                 dist += EditDistance.indelDistance(this.title, other.title);
@@ -159,28 +166,17 @@ public class Creator extends MARCDataField {
     }
 
     /**
-     * Change the field tag.
-     *
-     * @param tag the new tag.
-     */
-    public void setTag(String tag) {
-        this.tag = tag;
-    }
-
-    /**
-     *
+     * 
      * @param o Another creator
-     * @return True if both datafields have the same tag (regardless indicators)
-     * and content is identical for every subfield.
+     * @return True if both datafields have the same content for every subfield.
      */
     @Override
     public boolean equals(Object o) {
         if (o == null || o.getClass() != this.getClass()) {
             return false;
         } else {
-            Creator other = (Creator) o;
-            return this.tag.substring(0, 3).equals(other.tag.substring(0, 3))
-                    && this.subfields.equals(other.subfields);
+            AuthorityField other = (AuthorityField) o;
+            return this.subfields.equals(other.subfields);
         }
     }
 
@@ -189,6 +185,43 @@ public class Creator extends MARCDataField {
      */
     @Override
     public int hashCode() {
-        return 31 * tag.substring(1, 3).hashCode() ^ subfields.hashCode();
+        return subfields.hashCode();
+    }
+
+    /**
+     * 
+     * @return The subtype of field (established, variant, realted)
+     */
+    public AuthorityType getAuthorityType() {
+        switch(tag.charAt(0)) {
+            case 1:
+                return AuthorityType.ESTABLISHED;
+            case 4:
+                return AuthorityType.VARIANT;
+            case 5:
+                return AuthorityType.RELATED;
+            default:
+                return null;
+        }
+    }
+    
+    /**
+     * Make this field the established/authoritative, a variant or a related entry.
+     * The tag starts with 1, 4 or 5 respectivley
+     */
+    public void setAuthorityType(AuthorityType type) {
+        switch (type) {
+            case ESTABLISHED:
+                tag = "1" + tag.substring(1);
+                break;
+            case VARIANT:
+                tag = "4" + tag.substring(1);
+                break;
+            case RELATED:
+                tag = "5" + tag.substring(1);
+            default:
+                break;
+        }
+
     }
 }

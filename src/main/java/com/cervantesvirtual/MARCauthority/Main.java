@@ -2,7 +2,7 @@
  * This code can be distributed or modified
  * under the terms of the GNU General Public License V2.
  */
-package com.cervantesvirtual.marc.authority;
+package com.cervantesvirtual.MARCauthority;
 
 import com.cervantesvirtual.metadata.Collection;
 import com.cervantesvirtual.metadata.MetadataFormat;

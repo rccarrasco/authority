@@ -2,7 +2,7 @@ package com.cervantesvirtual.marc.authority;
 
 import com.cervantesvirtual.metadata.Collection;
 import com.cervantesvirtual.metadata.MetadataFormat;
-import com.cervantesvirtual.io.SafeFile;
+import com.cervantesvirtual.io.Backup;
 import com.cervantesvirtual.xml.DocumentParser;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -20,7 +20,7 @@ public class MARCBib2Auth {
                     + "Option -f prints only entries with variants");
         } else {
             boolean filter = false;
-            SafeFile fout = null;
+                        File fout = null;
             FileOutputStream fos = null;
             AuthorityCollection authority = new AuthorityCollection();
             MARCAuthorityBuilder builder = new MARCAuthorityBuilder();
@@ -29,7 +29,8 @@ public class MARCBib2Auth {
                 if (arg.equals("-f")) {
                     filter = true;
                 } else if (fos == null) {
-                    fout = new SafeFile(arg);
+                    fout = new File(arg);
+                    Backup.file(fout);
                     fos = new FileOutputStream(fout);
                 } else {
                     File dir = new File(arg);

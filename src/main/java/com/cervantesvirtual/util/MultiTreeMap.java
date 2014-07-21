@@ -218,16 +218,14 @@ public class MultiTreeMap<K, V> {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        boolean first = true;
+
         builder.append("{");
         for (K key : map.keySet()) {
-            if (first) {
-                first = false;
-            } else {
+            if (builder.length() > 1) {
                 builder.append(", ");
             }
             Collection<V> values = getValues(key);
-            builder.append("[").append(key).append(": ").append(values).append("]");
+            builder.append(key).append(": ").append(values);
         }
         builder.append("}");
         return builder.toString();

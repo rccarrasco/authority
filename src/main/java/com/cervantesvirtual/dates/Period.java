@@ -115,14 +115,16 @@ public class Period {
     public boolean equals(Object obj) {
         if (obj == null || getClass() != obj.getClass()) {
             return false;
-        }
+        } else {
 
-        final Period other = (Period) obj;
-        if (!this.low.equals(other.low)
-                || !this.high.equals(other.high)) {
-            return false;
+            final Period other = (Period) obj;
+            if (this.low.equals(other.low)
+                    && this.high.equals(other.high)) {
+                return true;
+            } else {
+                return false;
+            }
         }
-        return true;
     }
 
     /**
@@ -135,6 +137,10 @@ public class Period {
                 && this.high.compatible(other.high);
     }
 
+    /**
+     * 
+     * @return true if the period is undefined (for example, not initialized).
+     */
     public boolean isUndefined() {
         return low.getType() == DateType.UNKNOWN
                 && high.getType() == DateType.UNKNOWN;

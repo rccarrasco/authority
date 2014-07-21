@@ -47,7 +47,7 @@ public class NormalizerTest extends TestCase {
         System.out.println("normalizeWhitespace");
         String s = "1  2\n3";
         String expResult = "1 2 3";
-        String result = Normalizer.normalizeWhitespace(s);
+        String result = Normalizer.reduceWS(s);
         assertEquals(expResult, result);
     }
 
@@ -58,7 +58,7 @@ public class NormalizerTest extends TestCase {
         System.out.println("removePunctuation");
         String s = "¡un, dos, tres!";
         String expResult = "un dos tres";
-        String result = Normalizer.removePunctuation(s);
+        String result = Normalizer.strip(s);
         assertEquals(expResult, result);
     }
 

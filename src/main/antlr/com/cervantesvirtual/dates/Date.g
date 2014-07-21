@@ -2,21 +2,32 @@ grammar Date;
 
 @header { 
     package com.cervantesvirtual.dates;
-    import com.cervantesvirtual.dates.Date;
-    import com.cervantesvirtual.dates.DateType;
-    import com.cervantesvirtual.dates.Period; 
+   
+    import java.io.File;
+    import java.io.FileWriter; 
+    import java.net.URI;
+    import java.net.URISyntaxException;
+    import com.cervantesvirtual.io.Messages;
 }
 
 @lexer::header {package com.cervantesvirtual.dates;} 
 
 @members {
          
-     java.io.FileWriter writer = null;
+    FileWriter writer = null;
 
      private void writeToLogFile (String s) {
          try {
              if (writer == null) {
-                 writer = new java.io.FileWriter("antlr.log");
+                try{
+                    URI uri = DateParser.class.getProtectionDomain()
+                        .getCodeSource().getLocation().toURI();
+                    String dir = new File(uri.getPath()).getParent();
+                    File file = new File(dir, "antlr.log");
+                    writer = new FileWriter(file);
+                }catch (URISyntaxException ex) {
+                    Messages.info(DateParser.class.getName() + ": " + ex);
+                } 
              }
              writer.write(s + "\n");
              writer.flush();

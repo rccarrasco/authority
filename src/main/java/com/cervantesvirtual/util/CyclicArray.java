@@ -18,6 +18,8 @@
 package com.cervantesvirtual.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -40,17 +42,7 @@ public class CyclicArray<Type extends Comparable<Type>> implements
     }
 
     /**
-     * Constructor from array.
-     *
-     * @param source an array of objects
-     */
-    public CyclicArray(Type[] source) {
-        this.source = new java.util.ArrayList<>(
-                java.util.Arrays.asList(source));
-    }
-
-    /**
-     * Constructor from list.
+     * Constructor from a list.
      *
      * @param source a list of objects
      */
@@ -59,12 +51,21 @@ public class CyclicArray<Type extends Comparable<Type>> implements
     }
 
     /**
+     * Constructor from an array.
+     *
+     * @param source an array of objects
+     */
+    public CyclicArray(Type[] source) {
+        this(Arrays.asList(source));
+    }
+
+    /**
      * Copy constructor.
      *
      * @param other another CyclicArray
      */
     public CyclicArray(CyclicArray<Type> other) {
-        this.source = new java.util.ArrayList<>(other.source);
+        this.source = new ArrayList<>(other.source);
     }
 
     /**
@@ -75,11 +76,17 @@ public class CyclicArray<Type extends Comparable<Type>> implements
      * @return the original array rotated by offset positions to the left.
      */
     public List<Type> asList(int offset) {
-        List<Type> result = new ArrayList<>(source.size());
-        for (int pos = 0; pos < source.size(); ++pos) {
-            result.add(source.get((pos + offset) % source.size()));
-        }
+        List<Type> result = new ArrayList<>(source);
+
+        Collections.rotate(result, -offset);
+
+        /**
+         * List<Type> result = new ArrayList<>(source.size()); for (int pos = 0;
+         * pos < source.size(); ++pos) { result.add(source.get((pos + offset) %
+         * source.size())); }
+         */
         return result;
+
     }
 
     /**
@@ -108,7 +115,6 @@ public class CyclicArray<Type extends Comparable<Type>> implements
      * @return true if the input array is a rotation of this array.
      */
     public boolean equals(CyclicArray<Type> other) {
-        System.out.println(source + " vs " + other);
         if (this.size() != other.size()) {
             return false;
         } else {

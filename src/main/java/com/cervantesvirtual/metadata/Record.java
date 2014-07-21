@@ -65,7 +65,7 @@ public class Record {
             case MARC:
                 String heading = text.substring(0, 5);
                 String value = text.substring(5);
-                FieldType type = FieldType.typeFromMARCTag(heading);
+                FieldType type = FieldType.withMARCTag(heading);
 
                 switch (type) {
                     case MARC_LEADER:

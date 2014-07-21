@@ -38,16 +38,14 @@ public class Messages {
             URI uri = Messages.class.getProtectionDomain()
                     .getCodeSource().getLocation().toURI();
             String dir = new File(uri.getPath()).getParent();
-            File file = new File(dir, "ocrevaluation.log");
-
+            File file = new File(dir, "authority.log");
+            
+            System.err.println("Logfile is " + file.getAbsolutePath());
             addFile(file);
             Messages.info("Logfile is " + file);
-
-        } catch (SecurityException ex) {
-            Messages.info(Messages.class.getName() + ": " + ex);
         } catch (URISyntaxException ex) {
-            Logger.getLogger(Messages.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            Messages.info(Messages.class.getName() + ": " + ex);
+        } 
     }
 
     public static void addFile(File file) {

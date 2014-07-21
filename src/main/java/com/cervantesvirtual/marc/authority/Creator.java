@@ -21,6 +21,7 @@ public class Creator extends MARCDataField {
 
     /**
      * Identify rotations of the name
+     *
      * @param name
      * @return A cyclic array
      */
@@ -34,8 +35,9 @@ public class Creator extends MARCDataField {
     }
 
     /**
-     * Constructor from a bibliographic MARCDatafield 
-     * containing information about a creator.
+     * Constructor from a bibliographic MARCDatafield containing information
+     * about a creator.
+     *
      * @param field the MARCDatafield
      */
     public Creator(MARCDataField field) {
@@ -71,9 +73,8 @@ public class Creator extends MARCDataField {
 
     /**
      * Build a simple creator instance which has only its name defined.
-     * 
-     * @param name
-     *            a creators name.
+     *
+     * @param name a creators name.
      */
     public Creator(String name) {
         super("100", "$a" + name);
@@ -106,9 +107,8 @@ public class Creator extends MARCDataField {
 
     /**
      * Check if names and periods are compatible.
-     * 
-     * @param other
-     *            another creator.
+     *
+     * @param other another creator.
      * @return true if names, titles and periods are compatible.
      */
     public boolean compatible(Creator other) {
@@ -121,10 +121,10 @@ public class Creator extends MARCDataField {
     /**
      * A measure of the similarity between two creators based on their name and
      * dates.
-     * 
+     *
      * @return A similarity which is smaller than one if dates are compatible
-     *         within the default uncertainty and differences in normalized
-     *         names are below one character per word.
+     * within the default uncertainty and differences in normalized names are
+     * below one character per word.
      */
     public double similarity(Creator other) {
         if (this.period == null) {
@@ -143,7 +143,7 @@ public class Creator extends MARCDataField {
                 dist = Math.min(
                         dist,
                         EditDistance.indelDistance(ref,
-                        other.variants.toString(n)));
+                                other.variants.toString(n)));
             }
             if (this.title != null && other.title != null) {
                 dist += EditDistance.indelDistance(this.title, other.title);
@@ -160,7 +160,7 @@ public class Creator extends MARCDataField {
 
     /**
      * Change the field tag.
-     * 
+     *
      * @param tag the new tag.
      */
     public void setTag(String tag) {
@@ -168,9 +168,9 @@ public class Creator extends MARCDataField {
     }
 
     /**
-     * 
+     *
      * @param o Another creator
-     * @return True if both datafields have the same tag (regardless indicators) 
+     * @return True if both datafields have the same tag (regardless indicators)
      * and content is identical for every subfield.
      */
     @Override

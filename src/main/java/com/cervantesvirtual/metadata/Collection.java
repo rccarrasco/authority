@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
@@ -31,6 +32,8 @@ public class Collection {
 
     /**
      * Default constructor.
+     *
+     * @param format the metadata format
      */
     public Collection(MetadataFormat format) {
         this.format = format;
@@ -39,6 +42,9 @@ public class Collection {
 
     /**
      * Create a collection from a single XML document.
+     *
+     * @param format the metadata format
+     * @param doc the XML document containing the collection
      */
     public Collection(MetadataFormat format, Document doc) {
         this.format = format;
@@ -48,6 +54,10 @@ public class Collection {
 
     /**
      * Create a collection from a single CSV document.
+     *
+     * @param format the metadata format
+     * @param csv the CSV document containing the collection (one record per
+     * line)
      */
     public Collection(MetadataFormat format, CSVReader csv) {
         this.format = format;
@@ -58,27 +68,40 @@ public class Collection {
     /**
      * Create a collection from a file
      *
-     * @param format
-     * @param fileName The file name, either .xml or .csv (types can be extended
-     * in future versions).
+     * @param format the metadata format
+     * @param file the input file
+     * @throws java.io.FileNotFoundException
      */
-    public Collection(MetadataFormat format, String fileName)
+    public Collection(MetadataFormat format, File file)
             throws FileNotFoundException {
-        this.format = format;
-        records = new ArrayList<Record>();
+        String name = file.getName();
 
-        if (fileName.endsWith(".xml")) {
-            File file = new File(fileName);
-            if (file.exists()) {
-                add(format, DocumentParser.parse(file));
-            }
-        } else if (fileName.endsWith(".csv")) {
-            File file = new File(fileName);
-            if (file.exists()) {
-                add(format, new CSVReader(file, '\t')); // TAB delimiter is used
+        this.format = format;
+        this.records = new ArrayList<Record>();
+
+        if (file.isDirectory()) {
+            for(File subfile: file.listFiles()) {
+                add(format, subfile);
             }
         } else {
-            System.err.println("Unrecognised file extension in " + fileName);
+            add(format, file);       
+        }
+    }
+    
+    /** 
+     * Add a single file to the collection
+     * @param format
+     * @param file 
+     */
+    private void add(MetadataFormat format, File file) throws FileNotFoundException {
+        String name = file.getName();
+        
+         if (name.endsWith(".xml")) {
+            add(format, DocumentParser.parse(file));
+        } else if (name.endsWith(".csv")) {
+            add(format, new CSVReader(file, '\t')); // TAB delimiter is used
+        } else {
+            System.err.println("Unrecognised file extension in " + name);
         }
     }
 
@@ -99,7 +122,7 @@ public class Collection {
                     Node node = nodes.item(n);
                     records.add(new Record(format, node));
                 }
-            } catch (Exception e) {
+            } catch (MetadataException e) {
                 System.err.println("Could not read " + doc.getDocumentURI());
                 e.printStackTrace();
                 System.exit(1);
@@ -173,10 +196,15 @@ public class Collection {
 
     /**
      * Create a collection from an input stream which uses the empty line as
-     * record separator.
+     * record separator
+     *
+     * @param format the metadata format
+     * @param is input stream containing the metadata
+     * @throws java.io.IOException
+     * @throws com.cervantesvirtual.metadata.MetadataException
      */
     public Collection(MetadataFormat format, InputStream is)
-            throws java.io.IOException, MetadataException {
+            throws IOException, MetadataException {
         this.format = format;
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         records = new ArrayList<Record>();
@@ -196,6 +224,8 @@ public class Collection {
 
     /**
      * Get the collection format.
+     *
+     * @return the format of al records in teh collection
      */
     public MetadataFormat getFormat() {
         return format;
@@ -203,6 +233,8 @@ public class Collection {
 
     /**
      * Get all records in this collection.
+     *
+     * @return all the records in the collection
      */
     public List<Record> getRecords() {
         return records;
@@ -210,6 +242,8 @@ public class Collection {
 
     /**
      * Add a record to the collection.
+     *
+     * @param record the record to be added to the collection
      */
     public void add(Record record) {
         records.add(record);
@@ -218,6 +252,7 @@ public class Collection {
     /**
      * Compare two collections.
      *
+     * @param other another collection
      * @return true if they have the same size and the same records in identical
      * order.
      */
@@ -236,6 +271,7 @@ public class Collection {
     /**
      * Compare two collections.
      *
+     * @param o another collection
      * @return true if they have the same size and the same recods in identical
      * order.
      */
@@ -258,6 +294,8 @@ public class Collection {
 
     /**
      * Write the collection to an OutputStream.
+     *
+     * @param os the stream for the output
      */
     public void write(OutputStream os) {
         PrintWriter writer = new PrintWriter(os);
@@ -270,11 +308,13 @@ public class Collection {
     /**
      * Write the collection to an OutputStream with the specified encoding.
      *
+     * @param os the stream for the output
+     * @param charsetName the encoding for the output
      * @throws UnsupportedEncodingException
      */
     public void write(OutputStream os, String charsetName)
             throws UnsupportedEncodingException {
-        java.io.OutputStreamWriter osw = new java.io.OutputStreamWriter(os,
+        OutputStreamWriter osw = new OutputStreamWriter(os,
                 charsetName);
         PrintWriter writer = new PrintWriter(osw);
         for (Record record : records) {
@@ -285,6 +325,8 @@ public class Collection {
 
     /**
      * Write as XML document.
+     *
+     * @param os the stream for the output
      */
     public void writeXML(OutputStream os) {
         PrintWriter writer = new PrintWriter(os);

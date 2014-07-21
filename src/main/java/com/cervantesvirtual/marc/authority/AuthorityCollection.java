@@ -5,6 +5,7 @@ import com.cervantesvirtual.metadata.Field;
 import com.cervantesvirtual.metadata.MetadataFormat;
 import com.cervantesvirtual.metadata.Record;
 import com.cervantesvirtual.util.MultiHashMap;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,7 @@ public class AuthorityCollection extends Collection {
      * @param filename The containing file
      */
     public AuthorityCollection(String filename) throws FileNotFoundException {
-        super(MetadataFormat.MARC, filename);
+        super(MetadataFormat.MARC, new File(filename));
         index = new MultiHashMap<AuthorityField, AuthorityRecord>();
         for (Record record : getRecords()) {
             AuthorityRecord arecord = new AuthorityRecord(record);

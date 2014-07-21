@@ -8,14 +8,14 @@ import java.io.File;
 import java.io.FileOutputStream;
 
 /**
- * Quick and dirty transformation from bibliograpohic to authority
+ * Quick and dirty transformation from bibliographic to authority
  * @author RCC
  */
 public class MARCBib2Auth {
 
     public static void main(String[] args) throws java.io.IOException {
         if (args.length < 1) {
-            System.err.print("Usage: AuthorityCollection [-f]"
+            System.err.print("Usage: AuthorityCollection [-f]\n"
                     + "output_file input_dir_or_files\n"
                     + "Option -f prints only entries with variants");
         } else {

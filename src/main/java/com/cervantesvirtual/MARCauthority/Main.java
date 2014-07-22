@@ -2,15 +2,16 @@
  * This code can be distributed or modified
  * under the terms of the GNU General Public License V2.
  */
-package com.cervantesvirtual.marc.authority;
+package com.cervantesvirtual.MARCauthority;
 
 import com.cervantesvirtual.metadata.Collection;
 import com.cervantesvirtual.metadata.MetadataFormat;
-import com.cervantesvirtual.io.SafeFile;
+import com.cervantesvirtual.io.Backup;
 import com.cervantesvirtual.xml.DocumentParser;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  *
@@ -18,7 +19,7 @@ import java.io.FileOutputStream;
  */
 public class Main {
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws FileNotFoundException, IOException {
         if (args.length < 1) {
             System.err.println("Usage: MARCAuthorityBuilder"
                     + "authority_file bibliographic_dir_or_files");
@@ -28,7 +29,7 @@ public class Main {
             FileOutputStream fos = null;
             for (String arg : args) {
                 if (builder == null) {
-                    SafeFile.backup(arg);
+                    Backup.file(arg);
                     builder = new MARCAuthorityBuilder(arg);
                     try {
                         fos = new FileOutputStream(arg);

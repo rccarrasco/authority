@@ -23,9 +23,9 @@ package com.cervantesvirtual.dates;
  */
 public class Date {
 
+    DateType type;
     int value;
     int uncertainty;
-    DateType type;
 
     /**
      * The basic constructor
@@ -46,13 +46,13 @@ public class Date {
      * @param other another date.
      */
     public Date(Date other) {
+        this.type = other.type;
         this.value = other.value;
         this.uncertainty = other.uncertainty;
-        this.type = other.type;
     }
 
     /**
-     * @return the year or century number or 0 if date is unknown.
+     * @return the year or century number (or 0 if date is unknown).
      */
     public int getValue() {
         return value;
@@ -73,11 +73,11 @@ public class Date {
     }
 
     /**
-     * The century where the date is located, that is, 1 for years from 1 to 100
+     * The century the date belongs to, i.e., 1 for years from 1 to 100
      * (inclusive), 2 for year from 101 to 200, and -1 for year between -100 and
      * -1 (beware: year 0 does not exist!).
      *
-     * @return The century number.
+     * @return the century number the date belongs to.
      */
     public int getCentury() {
         if (type == DateType.CENTURY) {
@@ -93,7 +93,8 @@ public class Date {
      *
      * @param year the year of the date
      * @return the default uncertainty for a date, depending on historical
-     * period (non-negative)
+     * period (non-negative). The exact values should be part of a properties
+     * file.
      */
     public static int defaultUncertainty(int year) {
         return (year < 500) ? 50 : (year < 1500) ? 20 : (year < 1700) ? 10
@@ -134,24 +135,23 @@ public class Date {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
+        } else {
+            final Date other = (Date) obj;
+            if (this.type == other.type
+                    && this.value == other.value
+                    && this.uncertainty == other.uncertainty) {
+                return true;
+            } else {
+                return false;
+            }
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Date other = (Date) obj;
-        if (this.value != other.value
-                || this.uncertainty != other.uncertainty
-                || this.type != other.type) {
-            return false;
-        }
-        return true;
     }
 
     /**
      * Check if dates are compatible. Function compareTO has not been
-     * implemented because we do are not aware of any total ordering of dates
+     * implemented because we are not aware of any total ordering of dates
      * with uncertainties such that it allows to locate compatible dates with a
      * simple binary search.
      *
@@ -207,12 +207,13 @@ public class Date {
 
     /**
      * @return The string representation of the date.
+     * u0081 is plusminus sign
      */
     @Override
     public String toString() {
         switch (type) {
             case YEAR:
-                return "" + value + '\u00B1' + uncertainty;  // B! = plusminus sign
+                return String.valueOf(value) + '\u00B1' + uncertainty;  
             case CENTURY:
                 return "s. " + value + '\u00B1' + uncertainty;
             case UNKNOWN:

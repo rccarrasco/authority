@@ -10,21 +10,25 @@ public interface Field {
 
     /**
      * Get the field format
+     * @return the metadata format
      */
     public MetadataFormat getFormat();
 
     /**
      * Get the field type.
+     * @return the field type.
      */
     public FieldType getType();
 
     /**
      * Get the field tag.
+     * @return the field tag.
      */
     public String getTag();
 
     /**
      * Get the field content.
+     * @return the field content.
      */
     public String getValue();
 
@@ -40,7 +44,8 @@ public interface Field {
     public String toString();
 
     /**
-     * @return true if subfields are identical.
+     * @param o another object
+     * @return true if all subfields are identical.
      */
     @Override
     public boolean equals(Object o);

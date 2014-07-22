@@ -1,26 +1,26 @@
-package com.cervantesvirtual.marc.authority;
+package com.cervantesvirtual.MARCauthority;
 
 import com.cervantesvirtual.metadata.Collection;
 import com.cervantesvirtual.metadata.MetadataFormat;
-import com.cervantesvirtual.io.SafeFile;
+import com.cervantesvirtual.io.Backup;
 import com.cervantesvirtual.xml.DocumentParser;
 import java.io.File;
 import java.io.FileOutputStream;
 
 /**
- * Quick and dirty transformation from bibliograpohic to authority
+ * Quick and dirty transformation from bibliographic to authority
  * @author RCC
  */
 public class MARCBib2Auth {
 
     public static void main(String[] args) throws java.io.IOException {
         if (args.length < 1) {
-            System.err.print("Usage: AuthorityCollection [-f]"
+            System.err.print("Usage: AuthorityCollection [-f]\n"
                     + "output_file input_dir_or_files\n"
                     + "Option -f prints only entries with variants");
         } else {
             boolean filter = false;
-            SafeFile fout = null;
+                        File fout = null;
             FileOutputStream fos = null;
             AuthorityCollection authority = new AuthorityCollection();
             MARCAuthorityBuilder builder = new MARCAuthorityBuilder();
@@ -29,7 +29,8 @@ public class MARCBib2Auth {
                 if (arg.equals("-f")) {
                     filter = true;
                 } else if (fos == null) {
-                    fout = new SafeFile(arg);
+                    fout = new File(arg);
+                    Backup.file(fout);
                     fos = new FileOutputStream(fout);
                 } else {
                     File dir = new File(arg);

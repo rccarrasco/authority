@@ -1,5 +1,11 @@
 package com.cervantesvirtual.util;
 
+import com.cervantesvirtual.io.Messages;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 /**
  * Perform some normalization operations on text.
  *
@@ -10,13 +16,15 @@ public class Normalizer {
 
     final static java.text.Normalizer.Form decomposed = java.text.Normalizer.Form.NFD;
     final static java.text.Normalizer.Form composed = java.text.Normalizer.Form.NFC;
+    final static java.text.Normalizer.Form compatible = java.text.Normalizer.Form.NFKC;
+
     static String stopwords = null;
 
     static {
         try {
-            java.io.InputStream is = Normalizer.class.getResourceAsStream("/Normalizer.stopwords");
-            java.io.BufferedReader reader = new java.io.BufferedReader(
-                    new java.io.InputStreamReader(is, "UTF-8"));
+            InputStream is = Normalizer.class.getResourceAsStream("/Normalizer.stopwords");
+            BufferedReader reader = new java.io.BufferedReader(
+                    new InputStreamReader(is, "UTF-8"));
             StringBuilder builder = new StringBuilder();
 
             if (reader.ready()) {
@@ -31,8 +39,8 @@ public class Normalizer {
                 builder.append(")\\b");
                 stopwords = builder.toString();
             }
-        } catch (java.io.IOException e) {
-            System.err.println("Could not read stopwords file");
+        } catch (IOException e) {
+            Messages.severe("Could not read stopwords file");
         }
 
     }
@@ -45,7 +53,7 @@ public class Normalizer {
         if (stopwords == null) {
             return s;
         } else {
-            return normalizeWhitespace(s.replaceAll(stopwords, " "));
+            return reduceWS(s.replaceAll(stopwords, " "));
         }
     }
 
@@ -58,18 +66,22 @@ public class Normalizer {
      */
     public static String removeDiacritics(String s) {
         String res = java.text.Normalizer.normalize(s, decomposed);
-        return res.replaceAll("\u006E\u0303", "ñ").replaceAll("\u004E\u0303", "Ñ").replaceAll("\u0075\u0308", "ü").replaceAll("\u0055\u0308", "Ü").replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+        return res.replaceAll("\u006E\u0303", "ñ")
+                .replaceAll("\u004E\u0303", "Ñ")
+                .replaceAll("\u0075\u0308", "ü")
+                .replaceAll("\u0055\u0308", "Ü")
+                .replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
     }
 
     /**
-     * Reduce whitespace.
+     * Reduce whitespace (including line and paragraph separators)
      *
      * @param s a string.
-     * @return The string with simple spaces between words and without
-     * leading/trailing spaces
+     * @return The string with simple spaces between words.
      */
-    public static String normalizeWhitespace(String s) {
-        return s.replaceAll("\\p{Space}+", " ").trim();
+    public static String reduceWS(String s) {
+        return s.replaceAll("(\\p{Space}|\u2028|\u2029)+", " ")
+                .trim();
     }
 
     /**
@@ -78,8 +90,16 @@ public class Normalizer {
      * @param s a string.
      * @return The string with only letters, digits and spaces.
      */
-    public static String removePunctuation(String s) {
+    public static String strip(String s) {
         return s.replaceAll("[^\\p{L}\\p{Digit}\\p{Space}]", "");
+    }
+
+    /**
+     * @param s a string
+     * @return the string with all punctuation symbols removed.
+     */
+    public static String removePunctuation(String s) {
+        return s.replaceAll("\\p{P}+", "");
     }
 
     /**
@@ -91,7 +111,7 @@ public class Normalizer {
      */
     public static String normalize(String s) {
         String filtered = removeStopwords(s);
-        String trimmed = normalizeWhitespace(removePunctuation(filtered)).trim();
+        String trimmed = reduceWS(strip(filtered)).trim();
         return removeDiacritics(trimmed).toLowerCase();
     }
 
@@ -105,6 +125,7 @@ public class Normalizer {
     }
 
     /**
+     * @param s a string
      * @return the canonical representation of the string.
      */
     public static String toCanonical(String s) {
@@ -112,6 +133,7 @@ public class Normalizer {
     }
 
     /**
+     * @param s a string.
      * @return the string with characters <, >, &, " escaped
      */
     public static String encode(String s) {

@@ -21,7 +21,7 @@ import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
 
 /**
- *
+ * The formatter for messages (info, warning, or severe).
  * @author R.C.C.
  */
 public class LogFormatter extends Formatter {

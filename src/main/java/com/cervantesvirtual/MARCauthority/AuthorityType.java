@@ -1,4 +1,4 @@
-package com.cervantesvirtual.marc.authority;
+package com.cervantesvirtual.MARCauthority;
 
 /**
  * Types of entries: establisehd, variant (see from traciong) and related (see also tracing).

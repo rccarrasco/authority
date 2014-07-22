@@ -19,6 +19,7 @@ package com.cervantesvirtual.io;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
@@ -26,60 +27,61 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Creates a new file and a backup copy of the previous version if the file
- * already exists
+ * Creates a backup copy of the previous version of the file
+ * (if it already exists)
  *
  * @author RCC
  */
-public class SafeFile extends File {
+public class Backup {
 
     private static final long serialVersionUID = 1L;
 
     private static String backupName(File file) {
-        StringBuilder backname = new StringBuilder();
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMddhhmm");
         String version = format.format(new Date(file.lastModified()));
-        String name;
-        try {
-            name = file.getCanonicalPath();
-        } catch (IOException e) {
-            name = file.getName();
-        }
-        //CanonicalPath();
-        int lastdot = name.lastIndexOf('.');
 
-        backname.append(name.substring(0, lastdot));
-        backname.append("-v").append(version);
-        backname.append(name.substring(lastdot, name.length()));
-        return backname.toString();
+        return file.getAbsolutePath().replaceAll("^(.*)\\.(.*)$",
+                "$1" + "-v" + version + ".$2");
+
     }
 
-    public static void backup(String filename) {
-        File file;
-        FileChannel source;
-        FileChannel backup;
-        try {
-            file = new File(filename);
-            if (file.exists()) {
-                String backname = backupName(file);
-                System.out.println(backname);
-                source = new FileInputStream(file).getChannel();
-                backup = new FileOutputStream(backname).getChannel();
+    /**
+     * Create a backup file
+     *
+     * @param file the file for backup
+     * @throws java.io.IOException
+     */
+    public static void file(File file) throws IOException {
+        if (file.exists()) {
+            String backname = backupName(file);
+
+            Messages.info("Backup file is " + backname);
+
+            try {
+                FileChannel source = new FileInputStream(file).getChannel();
+                FileChannel backup = new FileOutputStream(backname).getChannel();
                 backup.transferFrom(source, 0, source.size());
+
+            } catch (FileNotFoundException ex) {
+                Messages.severe(ex.getMessage());
             }
-        } catch (java.io.IOException e) {
-            System.err.println("Could not create backup for file " + filename);
+        } else {
+            Messages.warning(file + " does not exist");
         }
+
     }
 
-    public void backup() {
-        backup(getName());
+    
+     /**
+     * Create a backup file
+     *
+     * @param filename the name of the file for backup
+     * @throws java.io.IOException
+     */
+    public static void file(String filename) throws IOException {
+        File file = new File(filename);
+        Backup.file(file);
     }
 
-    public SafeFile(String filename) {
-        super(filename);
-        if (exists()) {
-            backup(getName());
-        }
-    }
+ 
 }

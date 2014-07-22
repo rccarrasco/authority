@@ -15,8 +15,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-
 package com.cervantesvirtual.util;
+
 import java.util.Map;
 import java.util.TreeMap;
 import junit.framework.TestCase;
@@ -27,24 +27,26 @@ import junit.framework.TestCase;
  */
 public class MultiTreeMapTest extends TestCase {
 
-	public void testMultiTreeMap() {
-		Map<String, String> map = new TreeMap<>();
-		map.put("one", "two");
-		map.put("three", "four");
-		map.put("five", "six");
-		MultiTreeMap<String, String> multi = new MultiTreeMap<>(
-				map);
-		assertEquals(3, multi.size());
-		// System.out.println(multi);
-		multi.add("five", "seven");
-		multi.add("five", "eight");
-		multi.add("five", "nine");
-		multi.add("five", "ten");
-		multi.add("three", "four");
-		assertEquals(7, multi.size());
-		// System.out.println(multi);
-		multi.remove("three", "four");
-		// System.out.println(multi);
-		assertEquals(6, multi.size());
-	}
+    public void testMultiTreeMap() {
+        Map<String, String> map = new TreeMap<>();
+        map.put("one", "two");
+        map.put("three", "four");
+        map.put("five", "six");
+
+        MultiTreeMap<String, String> multi = new MultiTreeMap<>(map);
+        assertEquals(3, multi.size());
+
+        multi.add("five", "seven");
+        multi.add("five", "eight");
+        multi.add("five", "nine");
+        multi.add("five", "ten");
+        multi.add("three", "four");
+        assertEquals(7, multi.size());
+
+        multi.remove("three", "four");
+        assertEquals(6, multi.size());
+
+        String output = "{five: [eight, nine, seven, six, ten], one: [two], three: []}";
+        assertEquals(output, multi.toString());
+    }
 }

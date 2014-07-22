@@ -21,9 +21,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
- * A multimap storing only different values for the same key.
+ * A multimap storing different values for the same key.
  *
  * @author RCC
  * @version 2001.03.30
@@ -160,7 +161,7 @@ public class MultiHashMap<K, V> {
      * @return the set of keys in this map (even with an empty or null
      * collection)
      */
-    public java.util.Set<K> keySet() {
+    public Set<K> keySet() {
         return map.keySet();
     }
 
@@ -227,16 +228,13 @@ public class MultiHashMap<K, V> {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        boolean first = true;
         builder.append("{");
         for (K key : map.keySet()) {
-            if (first) {
-                first = false;
-            } else {
+            if (builder.length() > 1) {
                 builder.append(", ");
             }
             Collection<V> values = getValues(key);
-            builder.append("[").append(key).append(": ").append(values).append("]");
+            builder.append(key).append(": ").append(values);
         }
         builder.append("}");
         return builder.toString();

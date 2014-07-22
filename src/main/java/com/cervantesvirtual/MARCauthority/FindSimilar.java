@@ -1,13 +1,13 @@
-package com.cervantesvirtual.marc.authority;
+package com.cervantesvirtual.MARCauthority;
 
 import com.cervantesvirtual.metadata.Collection;
 import com.cervantesvirtual.metadata.MetadataFormat;
-import com.cervantesvirtual.xml.DocumentParser;
 import java.io.File;
 import java.io.PrintWriter;
 
 /**
- * Control of authorities: find occurrences of similar creators in authority file.
+ * Control of authorities: find occurrences of similar creators in authority
+ * file.
  */
 public class FindSimilar {
 
@@ -18,9 +18,10 @@ public class FindSimilar {
             // The document with the authority records.
             File infile = new File(args[0]);
             PrintWriter writer = new PrintWriter(args[1]);
-            org.w3c.dom.Document doc = DocumentParser.parse(infile);
+            
             // The authority collection
-            Collection collection = new Collection(MetadataFormat.MARC, doc);
+            Collection collection = new Collection(MetadataFormat.MARC, infile);
+            
             CreatorSet set = new CreatorSet(collection);
             System.err.println("Analysing " + set.size() + " creators");
             set.printSimilar(writer);

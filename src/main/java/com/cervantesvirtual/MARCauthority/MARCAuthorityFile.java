@@ -1,4 +1,4 @@
-package com.cervantesvirtual.marc.authority;
+package com.cervantesvirtual.MARCauthority;
 
 /**
  * Maintain a MARC authority file

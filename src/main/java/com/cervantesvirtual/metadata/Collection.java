@@ -1,6 +1,7 @@
 package com.cervantesvirtual.metadata;
 
 import com.cervantesvirtual.io.CSVReader;
+import com.cervantesvirtual.io.Messages;
 import com.cervantesvirtual.xml.DocumentParser;
 import java.io.BufferedReader;
 import java.io.File;
@@ -78,11 +79,12 @@ public class Collection {
 
         this.format = format;
         this.records = new ArrayList<Record>();
-
+        
         if (file.isDirectory()) {
             for(File subfile: file.listFiles()) {
                 add(format, subfile);
             }
+            Messages.info("Read all files in " + file.getName());
         } else {
             add(format, file);       
         }

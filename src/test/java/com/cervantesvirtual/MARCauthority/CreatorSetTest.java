@@ -1,6 +1,5 @@
-package com.cervantesvirtual.metadata.marc;
+package com.cervantesvirtual.MARCauthority;
 
-import com.cervantesvirtual.MARCauthority.CreatorSet;
 import com.cervantesvirtual.metadata.Collection;
 import com.cervantesvirtual.metadata.MetadataFormat;
 import java.io.File;
@@ -20,4 +19,5 @@ public class CreatorSetTest extends TestCase {
         System.out.println(set);
         assertEquals(2, set.size());
     }
+
 }

@@ -1,19 +1,19 @@
 package com.cervantesvirtual.MARCauthority;
 
+import com.cervantesvirtual.io.Messages;
+import com.cervantesvirtual.metadata.Collection;
+import com.cervantesvirtual.metadata.Field;
+import com.cervantesvirtual.metadata.FieldType;
+import com.cervantesvirtual.metadata.MARCDataField;
+import com.cervantesvirtual.metadata.Record;
+import com.cervantesvirtual.util.MultiTreeMap;
+import com.cervantesvirtual.util.StringFinder;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import com.cervantesvirtual.metadata.FieldType;
-import com.cervantesvirtual.metadata.Collection;
-import com.cervantesvirtual.metadata.Record;
-import com.cervantesvirtual.metadata.Field;
-import com.cervantesvirtual.metadata.MARCDataField;
-import com.cervantesvirtual.util.MultiTreeMap;
-import com.cervantesvirtual.util.StringFinder;
-import java.util.List;
 
 /**
  * A set storing all creators and variants (extended MARCDataFields).
@@ -109,8 +109,9 @@ public class CreatorSet extends HashSet<Creator> {
 
         for (Creator creator : this) {
             String name = creator.getFullName();
-            //writer.println(name);
             Set<String> alternatives = finder.select(name, name.length() / 4);
+            
+            //Messages.info(name);
             for (String alternative : alternatives) {
                 // System.out.println(name + " * " + alternative);
                 for (Creator altcreator : creators.get(alternative)) {

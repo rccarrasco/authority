@@ -7,6 +7,7 @@ import com.cervantesvirtual.dates.DateParser;
 import com.cervantesvirtual.dates.Period;
 import com.cervantesvirtual.metadata.MARCDataField;
 import com.cervantesvirtual.metadata.MARCSubfield;
+import java.util.Arrays;
 
 /**
  * Stores data about a creator.
@@ -28,6 +29,7 @@ public class Creator extends MARCDataField {
     private CyclicArray<String> normalizedVariants(String name) {
 //        String[] tokens = normal.split("\\p{Space}+");
         String[] tokens = Normalizer.removeStopwords(name.trim()).split(",");
+        System.out.println(name+"->"+Arrays.toString(tokens));
         for (int n = 0; n < tokens.length; ++n) {
             tokens[n] = Normalizer.normalize(tokens[n]);
         }
@@ -114,6 +116,7 @@ public class Creator extends MARCDataField {
     public boolean compatible(Creator other) {
         boolean b = this.title == null || other.title == null
                 || this.title.equals(other.title);
+       
         return this.variants.equals(other.variants) && b
                 && this.period.compatible(other.period);
     }

@@ -1,4 +1,4 @@
-package com.cervantesvirtual.metadata.marc;
+package com.cervantesvirtual.MARCauthority;
 
 
 import junit.framework.TestCase;

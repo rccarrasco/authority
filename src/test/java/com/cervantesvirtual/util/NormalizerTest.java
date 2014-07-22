@@ -10,7 +10,7 @@ import junit.framework.TestCase;
 
 /**
  *
- * @author rafa
+ * @author RCC
  */
 public class NormalizerTest extends TestCase {
     

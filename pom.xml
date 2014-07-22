@@ -44,7 +44,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>com.cervantesvirtual.marc.authority.FindSimilar</mainClass>
+                            <mainClass>com.cervantesvirtual.MARCauthority.FindSimilar</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
